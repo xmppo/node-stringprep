@@ -1,9 +1,8 @@
 #include <node.h>
 #include <node_object_wrap.h>
-extern "C" {
+#include <unicode/unistr.h>
 #include <unicode/usprep.h>
-#include <string.h>
-}
+#include <cstring>
 #include <exception>
 
 using namespace v8;
@@ -110,23 +109,23 @@ protected:
     if (args.Length() == 1 && args[0]->IsString())
       {
         StringPrep *self = ObjectWrap::Unwrap<StringPrep>(args.This());
-	String::Utf8Value arg0(args[0]->ToString());
+	String::Value arg0(args[0]->ToString());
         return scope.Close(self->prepare(arg0));
       }
     else
       return throwTypeError("Bad argument.");
   }
 
-  Handle<Value> prepare(String::Utf8Value &str)
+  Handle<Value> prepare(String::Value &str)
   {
     size_t destLen = str.length();
-    char *dest = NULL;
+    UChar *dest = NULL;
     while(!dest)
       {
-        dest = new char[destLen];
+        dest = new UChar[destLen];
         size_t w = usprep_prepare(profile,
-                                  reinterpret_cast<UChar *>(*str), str.length(),
-                                  reinterpret_cast<UChar *>(dest), destLen,
+                                  *str, str.length(),
+                                  dest, destLen,
                                   USPREP_DEFAULT, NULL, &error);
 
         if (error == U_BUFFER_OVERFLOW_ERROR)
@@ -142,6 +141,8 @@ protected:
             delete[] dest;
             return ThrowException(makeException());
           }
+        else
+          destLen = w;
       }
 
     Local<String> result = String::New(dest, destLen);

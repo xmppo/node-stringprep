@@ -2,15 +2,16 @@ var SP = require('./build/default/node-stringprep');
 
 function run() {
     var p = new SP.StringPrep('nameprep');
-    if (p.prepare('FooBar') !== 'foobar')
-	throw p.prepare('FooBar');
+    var r = p.prepare('A\u0308ffin');
+    if (r !== 'äffin')
+	throw r;
 
-    nextTick(run);
+    process.nextTick(run);
 }
 
 try {
     run();
 } catch (e) {
-    console.log(e);
+    console.log(JSON.stringify(e));
 }
 
