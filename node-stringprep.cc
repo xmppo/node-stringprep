@@ -47,7 +47,7 @@ public:
 
   Handle<Value> makeException() const
   {
-    return ThrowException(Exception::Error(String::New(errorName())));
+    return Exception::Error(String::New(errorName()));
   }
 
 protected:
@@ -60,24 +60,27 @@ protected:
     if (args.Length() == 1 && args[0]->IsString())
       {
 	String::Utf8Value arg0(args[0]->ToString());
-	UStringPrepProfileType profileType = parseProfileType(arg0);
+        UStringPrepProfileType profileType;
+        try
+          {
+            profileType = parseProfileType(arg0);
+          }
+        catch (UnknownProfileException &)
+          {
+            return throwTypeError("Unknown StringPrep profile");
+          }
 
-	if (profileType < 0)
-	  return throwTypeError("Unknown StringPrep profile");
-	else
-	  {
-	    StringPrep *self = new StringPrep(profileType);
-	    if (self->good())
-	      {
-		self->Wrap(args.This());
-		return args.This();
-	      }
-	    else
-	      {
-                Handle<Value> exception = self->makeException();
-		delete self;
-		return ThrowException(exception);
-	      }
+        StringPrep *self = new StringPrep(profileType);
+        if (self->good())
+          {
+            self->Wrap(args.This());
+            return args.This();
+          }
+        else
+          {
+            Handle<Value> exception = self->makeException();
+            delete self;
+            return ThrowException(exception);
 	  }
       }
     else
@@ -85,6 +88,7 @@ protected:
   }
 
   StringPrep(const UStringPrepProfileType profileType)
+    : error(U_ZERO_ERROR)
   {
     profile = usprep_openByType(profileType, &error);
   }
@@ -150,7 +154,7 @@ private:
   UErrorCode error;
 
   static enum UStringPrepProfileType parseProfileType(String::Utf8Value &profile)
-  //throw(UnknownProfileException)
+    throw(UnknownProfileException)
   {
     if (strcasecmp(*profile, "nameprep") == 0)
       return USPREP_RFC3491_NAMEPREP;
