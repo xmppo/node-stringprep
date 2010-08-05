@@ -13,5 +13,7 @@ Exposes predefined Unicode normalization functions that are required by many pro
 ## Usage ##
 
     var StringPrep = require('node-stringprep').StringPrep;
-    var prep = new StringPrep('nameprep');  // [profiles](http://github.com/astro/node-stringprep/blob/master/node-stringprep.cc#L160)
+    var prep = new StringPrep('nameprep');
     prep.prepare('Äffchen')  // => 'äffchen'
+
+For a list of supported profiles, see [node-stringprep.cc](http://github.com/astro/node-stringprep/blob/master/node-stringprep.cc#L160)
