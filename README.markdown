@@ -1,6 +1,6 @@
 # node-stringprep #
 
-(Flattr this!)[https://flattr.com/thing/44598/node-stringprep]
+[Flattr this!](https://flattr.com/thing/44598/node-stringprep)
 
 ## Purpose ##
 
