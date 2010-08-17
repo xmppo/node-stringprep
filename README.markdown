@@ -8,6 +8,9 @@ Exposes predefined Unicode normalization functions that are required by many pro
 
 ## Installation ##
 
+    apt-get install libicu-dev  # Debian
+    emerge icu                  # Gentoo
+    
     npm install node-stringprep
 
 ## Usage ##
