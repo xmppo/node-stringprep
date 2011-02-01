@@ -13,6 +13,8 @@ def set_options(opt):
 def configure(conf):
   conf.check_tool('compiler_cxx')
   conf.check_tool('node_addon')
+  if backtick('icu-config --version')[0] != '4':
+    conf.fatal('Missing library icu 4.x.x')
   conf.env['CXXFLAGS_ICU'] = backtick('icu-config --cxxflags').split(' ')
   conf.env['LINKFLAGS_ICU'] = backtick('icu-config --ldflags-libsonly').split(' ')
 
