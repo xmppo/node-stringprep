@@ -15,8 +15,8 @@ def configure(conf):
   conf.check_tool('node_addon')
   if backtick('icu-config --version')[0] != '4':
     conf.fatal('Missing library icu 4.x.x')
-  conf.env['CXXFLAGS_ICU'] = backtick('icu-config --cxxflags').replace('-pedantic', '').split(' ')
-  conf.env['LINKFLAGS_ICU'] = backtick('icu-config --ldflags-libsonly').split(' ')
+  conf.env['CXXFLAGS_ICU'] = backtick('icu-config --cppflags').replace('-pedantic', '').split(' ')
+  conf.env['LINKFLAGS_ICU'] = backtick('icu-config --ldflags').split(' ')
 
 def build(bld):
   obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
