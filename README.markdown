@@ -10,6 +10,7 @@ Exposes predefined Unicode normalization functions that are required by many pro
 
     apt-get install libicu-dev  # Debian
     emerge icu                  # Gentoo
+    port install icu +devel     # OSX using macports
     
     npm install node-stringprep
 
