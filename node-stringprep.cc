@@ -55,7 +55,7 @@ protected:
   {
     HandleScope scope;
 
-    if (args.Length() == 1 && args[0]->IsString())
+    if (args.Length() >= 1 && args[0]->IsString())
       {
 	String::Utf8Value arg0(args[0]->ToString());
         UStringPrepProfileType profileType;
@@ -105,7 +105,7 @@ protected:
   {
     HandleScope scope;
 
-    if (args.Length() == 1 && args[0]->IsString())
+    if (args.Length() >= 1 && args[0]->IsString())
       {
         StringPrep *self = ObjectWrap::Unwrap<StringPrep>(args.This());
 	String::Value arg0(args[0]->ToString());
