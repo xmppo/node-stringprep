@@ -117,7 +117,7 @@ protected:
 
   Handle<Value> prepare(String::Value &str)
   {
-    size_t destLen = str.length();
+    size_t destLen = str.length() + 1;
     UChar *dest = NULL;
     while(!dest)
       {
