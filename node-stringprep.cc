@@ -2,6 +2,7 @@
 #include <node_object_wrap.h>
 #include <unicode/unistr.h>
 #include <unicode/usprep.h>
+#include <unicode/uidna.h>
 #include <cstring>
 #include <exception>
 
@@ -190,11 +191,61 @@ private:
 };
 
 
+/*** IDN support ***/
+
+Handle<Value> ToUnicode(const Arguments& args)
+{
+  HandleScope scope;
+
+  if (args.Length() >= 1 && args[0]->IsString())
+  {
+    String::Value str(args[0]->ToString());
+    // ASCII encoding (xn--*--*) should be longer than Unicode
+    size_t destLen = str.length() + 1;
+    UChar *dest = NULL;
+    while(!dest)
+      {
+        dest = new UChar[destLen];
+        UErrorCode error = U_ZERO_ERROR;
+        size_t w = uidna_toUnicode(*str, str.length(),
+                                   dest, destLen,
+                                   UIDNA_DEFAULT,
+                                   NULL, &error);
+        
+        if (error == U_BUFFER_OVERFLOW_ERROR)
+          {
+            // retry with a dest buffer twice as large
+            destLen *= 2;
+            delete[] dest;
+            dest = NULL;
+          }
+        else if (U_FAILURE(error))
+          {
+            // other error, just bail out
+            delete[] dest;
+            Handle<Value> exception = Exception::Error(String::New(u_errorName(error)));
+            return scope.Close(ThrowException(exception));
+          }
+        else
+          destLen = w;
+      }
+
+    Local<String> result = String::New(dest, destLen);
+    delete[] dest;
+    return scope.Close(result);
+  }
+  else
+    return throwTypeError("Bad argument.");
+}
+
+
+
 /*** Initialization ***/
 
 extern "C" void init(Handle<Object> target)
 {
   HandleScope scope;
   StringPrep::Initialize(target);
+  NODE_SET_METHOD(target, "toUnicode", ToUnicode);
 }
 
