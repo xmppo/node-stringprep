@@ -35,8 +35,7 @@ public:
 
   bool good() const
   {
-    // warnings are negative, errors positive
-    return error <= 0;
+    return U_SUCCESS(error);
   }
 
   const char *errorName() const
