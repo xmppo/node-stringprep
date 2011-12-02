@@ -2,7 +2,7 @@
   "version": "0.1.1",
   "main": "./build/default/node-stringprep",
   "description": "ICU StringPrep profiles",
-  "scripts" : { "install" : "./install.sh" },
+  "scripts" : { "install" : "sh ./install.sh" },
   "dependencies": [],
   "repositories": [{ "type": "git",
 		     "path": "git://github.com/astro/node-stringprep.git"
