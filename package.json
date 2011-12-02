@@ -1,5 +1,5 @@
 { "name": "node-stringprep",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./build/default/node-stringprep",
   "description": "ICU StringPrep profiles",
   "scripts" : { "install" : "sh ./install.sh" },
