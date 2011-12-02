@@ -8,10 +8,19 @@ Exposes predefined Unicode normalization functions that are required by many pro
 
 ## Installation ##
 
-    apt-get install libicu-dev  # Debian
-    emerge icu                  # Gentoo
-    port install icu +devel     # OSX using macports
-    
+    # Debian
+    apt-get install libicu-dev
+
+    # Gentoo
+    emerge icu
+
+    # OSX using MacPorts
+    port install icu +devel
+
+    # OSX using Homebrew
+    brew install icu4c
+    ln -s /usr/local/Cellar/icu4c/<VERSION>/bin/icu-config /usr/local/bin/icu-config
+
     npm install node-stringprep
 
 ## Usage ##
