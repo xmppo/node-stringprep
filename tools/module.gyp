@@ -60,12 +60,12 @@
 		  #gyp\pylib\gyp\generator\make.py that contain append('-arch i386') (2 instances)
 		  'libraries': [ #this is a hack to specify this linker option in make              
 			'-undefined dynamic_lookup',
-			'-licu',
+			'-lICU',
 		  ],
         }],
         [ 'OS=="linux"', {
           'libraries': [         
-			'-licu',
+			'-lpthread -ldl -lm   -L/usr/local/lib -licui18n -licuuc -licudata  -lpthread -ldl -lm',
 		  ],
         }]
       ],
