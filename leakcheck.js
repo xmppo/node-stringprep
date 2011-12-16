@@ -1,4 +1,4 @@
-var SP = require('./build/default/node-stringprep');
+var SP = require('./build/Release/node_stringprep.node');
 
 function run() {
     var p = new SP.StringPrep('nameprep');
