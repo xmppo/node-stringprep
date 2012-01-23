@@ -6,9 +6,9 @@
   "scripts" : { "install" : "sh ./install.sh" },
   "dependencies": {},
   "devDependencies": {},
-  "repositories": { "type": "git",
-		    "path": "git://github.com/astro/node-stringprep.git"
-		  },
+  "repository": { "type": "git",
+		  "path": "git://github.com/astro/node-stringprep.git"
+		},
   "homepage": "http://github.com/astro/node-stringprep",
   "bugs": "http://github.com/astro/node-stringprep/issues",
   "author": { "name": "Astro",
