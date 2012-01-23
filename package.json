@@ -2,17 +2,19 @@
   "version": "0.1.2",
   "main": "./build/default/node-stringprep",
   "description": "ICU StringPrep profiles",
+  "keywords": ["unicode", "stringprep", "icu"],
   "scripts" : { "install" : "sh ./install.sh" },
   "dependencies": {},
-  "repositories": [{ "type": "git",
-		     "path": "git://github.com/astro/node-stringprep.git"
-		   }],
+  "devDependencies": {},
+  "repositories": { "type": "git",
+		    "path": "git://github.com/astro/node-stringprep.git"
+		  },
   "homepage": "http://github.com/astro/node-stringprep",
   "bugs": "http://github.com/astro/node-stringprep/issues",
-  "maintainers": [{ "name": "Astro",
-		    "email": "astro@spaceboyz.net",
-		    "web": "http://spaceboyz.net/~astro/"
-		  }],
+  "author": { "name": "Astro",
+	      "email": "astro@spaceboyz.net",
+	      "web": "http://spaceboyz.net/~astro/"
+	    }],
   "licenses": [{ "type": "MIT" }],
-  "engine": "node"
+  "engines": { "node": ">=0.4" }
 }
