@@ -1,6 +1,6 @@
 { "name": "node-stringprep",
   "version": "0.1.2",
-  "main": "./build/default/node-stringprep",
+  "main": "./build/Release/node_stringprep.node",
   "description": "ICU StringPrep profiles",
   "keywords": ["unicode", "stringprep", "icu"],
   "scripts" : { "install" : "sh ./install.sh" },

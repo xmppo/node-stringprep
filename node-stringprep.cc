@@ -9,6 +9,13 @@
 using namespace v8;
 using namespace node;
 
+#if defined(_WIN32) || defined(_WIN64)
+  #define snprintf _snprintf
+  #define vsnprintf _vsnprintf
+  #define strcasecmp _stricmp
+  #define strncasecmp _strnicmp
+#endif
+
 /*** Utility ***/
 
 static Handle<Value> throwTypeError(const char *msg)
@@ -150,6 +157,7 @@ protected:
     return result;
   }
 
+
 private:
   UStringPrepProfile *profile;
   UErrorCode error;
@@ -242,10 +250,12 @@ Handle<Value> ToUnicode(const Arguments& args)
 
 /*** Initialization ***/
 
-extern "C" void init(Handle<Object> target)
-{
-  HandleScope scope;
-  StringPrep::Initialize(target);
-  NODE_SET_METHOD(target, "toUnicode", ToUnicode);
-}
+extern "C" {
+  static void init (Handle<Object> target)
+  {
+    StringPrep::Initialize(target);
+	NODE_SET_METHOD(target, "toUnicode", ToUnicode);
+  }
 
+  NODE_MODULE(node_stringprep, init);
+};
