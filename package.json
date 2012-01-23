@@ -14,7 +14,7 @@
   "author": { "name": "Astro",
 	      "email": "astro@spaceboyz.net",
 	      "web": "http://spaceboyz.net/~astro/"
-	    }],
+	    },
   "licenses": [{ "type": "MIT" }],
   "engines": { "node": ">=0.4" }
 }
