@@ -1,5 +1,5 @@
 { "name": "node-stringprep",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "./build/default/node-stringprep",
   "description": "ICU StringPrep profiles",
   "keywords": ["unicode", "stringprep", "icu"],
