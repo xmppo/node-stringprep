@@ -3,8 +3,9 @@
     {
       'target_name': 'node-stringprep',
       'sources': [ 'node-stringprep.cc' ],
-      'cflags!': [ '-fno-exceptions' ],
+      'cflags!': [ '-fno-exceptions', '`icu-config --cppflags`' ],
       'cflags_cc!': [ '-fno-exceptions' ],
+      'libraries': [ '`icu-config --ldflags`' ],
       'conditions': [
         ['OS=="mac"', {
           'include_dirs': [
