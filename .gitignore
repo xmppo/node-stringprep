@@ -1,2 +1,7 @@
 .lock-wscript
-build/
+.DS_Store
+node_modules
+build
+*~
+*.log
+.idea
