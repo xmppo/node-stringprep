@@ -15,5 +15,6 @@
 	      "web": "http://spaceboyz.net/~astro/"
 	    },
   "licenses": [{ "type": "MIT" }],
-  "engines": { "node": ">=0.4" }
+  "engines": { "node": ">=0.4" },
+  "contributors": ["Camilo Aguilar", "Mauro Pompilio", "Joachim Kainz"]
 }
