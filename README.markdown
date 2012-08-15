@@ -20,6 +20,7 @@ Exposes predefined Unicode normalization functions that are required by many pro
     # OSX using Homebrew
     brew install icu4c
     ln -s /usr/local/Cellar/icu4c/<VERSION>/bin/icu-config /usr/local/bin/icu-config
+    ln -s /usr/local/Cellar/icu4c/<VERSION>/include/unicode /usr/local/include
 
     npm install node-stringprep
 
