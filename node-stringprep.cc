@@ -249,3 +249,4 @@ extern "C" void init(Handle<Object> target)
   NODE_SET_METHOD(target, "toUnicode", ToUnicode);
 }
 
+NODE_MODULE(node_stringprep, init)
