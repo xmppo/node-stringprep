@@ -1,7 +1,7 @@
 {
   'targets': [
     {
-      'target_name': 'node-stringprep',
+      'target_name': 'node_stringprep',
       'sources': [ 'node-stringprep.cc' ],
       'cflags!': [ '-fno-exceptions', '`icu-config --cppflags`' ],
       'cflags_cc!': [ '-fno-exceptions' ],
