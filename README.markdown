@@ -33,7 +33,7 @@ If experiencing issues with 'homebrew' installing version 50.1 of icu4c, try the
     brew tap homebrew/versions
     brew versions icu4c
     cd $(brew --prefix) && git pull --rebase
-    git checkout c25fd2f /usr/local/Library/Formula/icu4c.rb
+    git checkout c25fd2f $(brew --prefix)/Library/Formula/icu4c.rb
     brew install icu4c
     
 ## Usage ##
