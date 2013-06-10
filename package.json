@@ -1,20 +1,37 @@
-{ "name": "node-stringprep",
-  "version": "0.1.5",
+{
+  "name": "node-stringprep",
+  "version": "0.1.6",
   "main": "./build/Release/node-stringprep.node",
   "description": "ICU StringPrep profiles",
-  "keywords": ["unicode", "stringprep", "icu"],
+  "keywords": [
+    "unicode",
+    "stringprep",
+    "icu"
+  ],
   "dependencies": {},
   "devDependencies": {},
-  "repository": { "type": "git",
-		  "path": "git://github.com/astro/node-stringprep.git"
-		},
+  "repository": {
+    "type": "git",
+    "path": "git://github.com/astro/node-stringprep.git"
+  },
   "homepage": "http://github.com/astro/node-stringprep",
   "bugs": "http://github.com/astro/node-stringprep/issues",
-  "author": { "name": "Astro",
-	      "email": "astro@spaceboyz.net",
-	      "web": "http://spaceboyz.net/~astro/"
-	    },
-  "licenses": [{ "type": "MIT" }],
-  "engines": { "node": ">=0.4" },
-  "contributors": ["Camilo Aguilar", "Mauro Pompilio", "Joachim Kainz"]
+  "author": {
+    "name": "Astro",
+    "email": "astro@spaceboyz.net",
+    "web": "http://spaceboyz.net/~astro/"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "engines": {
+    "node": ">=0.4"
+  },
+  "contributors": [
+    "Camilo Aguilar",
+    "Mauro Pompilio",
+    "Joachim Kainz"
+  ]
 }
