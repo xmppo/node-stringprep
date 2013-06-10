@@ -1,6 +1,6 @@
 {
   "name": "node-stringprep",
-  "version": "0.1.6",
+  "version": "0.1.5-test",
   "main": "./build/Release/node-stringprep.node",
   "description": "ICU StringPrep profiles",
   "keywords": [
