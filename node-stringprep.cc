@@ -122,6 +122,7 @@ protected:
     UChar *dest = NULL;
     while(!dest)
       {
+        error = U_ZERO_ERROR;
         dest = new UChar[destLen];
         size_t w = usprep_prepare(profile,
                                   *str, str.length(),
