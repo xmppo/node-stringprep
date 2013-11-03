@@ -9,7 +9,7 @@ Exposes predefined Unicode normalization functions that are required by many pro
 ## Installation ##
 
     npm i node-stringprep
-    
+
 ### Debian ###
 
     apt-get install libicu-dev
@@ -25,7 +25,7 @@ emerge icu
 #### Homebrew ####
     brew install icu4c
     ln -s /usr/local/Cellar/icu4c/<VERSION>/bin/icu-config /usr/local/bin/icu-config
-    ln -s /usr/local/Cellar/icu4c/<VERSION>/include/unicode /usr/local/include
+    ln -s /usr/local/Cellar/icu4c/<VERSION>/include /usr/local/include
 
 If experiencing issues with 'homebrew' installing version 50.1 of icu4c, try the following:
 
@@ -35,7 +35,7 @@ If experiencing issues with 'homebrew' installing version 50.1 of icu4c, try the
     cd $(brew --prefix) && git pull --rebase
     git checkout c25fd2f $(brew --prefix)/Library/Formula/icu4c.rb
     brew install icu4c
-    
+
 ## Usage ##
 
     var StringPrep = require('node-stringprep').StringPrep;
