@@ -25,7 +25,7 @@ emerge icu
 #### Homebrew ####
     brew install icu4c
     ln -s /usr/local/Cellar/icu4c/<VERSION>/bin/icu-config /usr/local/bin/icu-config
-    ln -s /usr/local/Cellar/icu4c/<VERSION>/include /usr/local/include
+    ln -s /usr/local/Cellar/icu4c/<VERSION>/include/* /usr/local/include
 
 If experiencing issues with 'homebrew' installing version 50.1 of icu4c, try the following:
 
