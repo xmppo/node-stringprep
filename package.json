@@ -8,6 +8,9 @@
     "stringprep",
     "icu"
   ],
+  "scripts": {
+    "test": "node leakcheck.js"
+  },
   "dependencies": {},
   "devDependencies": {},
   "repository": {
@@ -21,13 +24,18 @@
     "email": "astro@spaceboyz.net",
     "web": "http://spaceboyz.net/~astro/"
   },
+  "maintainers": [{
+    "name": "Lloyd Watkin",
+    "email": "lloyd@evilprofessor.co.uk",
+    "web": "http://evilprofessor.co.uk"
+  }],
   "licenses": [
     {
       "type": "MIT"
     }
   ],
   "engines": {
-    "node": ">=0.4"
+    "node": ">=0.8"
   },
   "contributors": [
     "Camilo Aguilar",
