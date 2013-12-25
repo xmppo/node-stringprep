@@ -6,6 +6,9 @@
       'cflags!': [ '-fno-exceptions', '`icu-config --cppflags`' ],
       'cflags_cc!': [ '-fno-exceptions' ],
       'libraries': [ '`icu-config --ldflags`' ],
+      'include_dirs': [
+        '<!(node -e "require(\'nan\')")'
+      ],
       'conditions': [
         ['OS=="mac"', {
           'include_dirs': [

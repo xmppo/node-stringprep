@@ -1,5 +1,4 @@
-#include <node.h>
-#include <node_object_wrap.h>
+#include <nan.h>
 #include <unicode/unistr.h>
 #include <unicode/usprep.h>
 #include <unicode/uidna.h>
@@ -9,25 +8,20 @@
 using namespace v8;
 using namespace node;
 
-/*** Utility ***/
-
-static Handle<Value> throwTypeError(const char *msg)
-{
-  return ThrowException(Exception::TypeError(String::New(msg)));
-}
-
-
 /* supports return of just enum */
 class UnknownProfileException : public std::exception {
 };
 
+// protect constructor from GC
+static Persistent<FunctionTemplate> stringprep_constructor;
 
 class StringPrep : public ObjectWrap {
 public:
   static void Initialize(Handle<Object> target)
   {
-    HandleScope scope;
+    NanScope();
     Local<FunctionTemplate> t = FunctionTemplate::New(New);
+    NanAssignPersistent(FunctionTemplate, stringprep_constructor, t);
     t->InstanceTemplate()->SetInternalFieldCount(1);
     NODE_SET_PROTOTYPE_METHOD(t, "prepare", Prepare);
 
@@ -44,21 +38,16 @@ public:
     return u_errorName(error);
   }
 
-  Handle<Value> makeException() const
-  {
-    return Exception::Error(String::New(errorName()));
-  }
-
 protected:
   /*** Constructor ***/
 
-  static Handle<Value> New(const Arguments& args)
+  static NAN_METHOD(New)
   {
-    HandleScope scope;
+    NanScope();
 
     if (args.Length() >= 1 && args[0]->IsString())
       {
-	String::Utf8Value arg0(args[0]->ToString());
+        String::Utf8Value arg0(args[0]->ToString());
         UStringPrepProfileType profileType;
         try
           {
@@ -66,24 +55,28 @@ protected:
           }
         catch (UnknownProfileException &)
           {
-            return throwTypeError("Unknown StringPrep profile");
+            NanThrowTypeError("Unknown StringPrep profile");
+            NanReturnUndefined();
           }
 
         StringPrep *self = new StringPrep(profileType);
         if (self->good())
           {
             self->Wrap(args.This());
-            return args.This();
+            NanReturnValue(args.This());
           }
         else
           {
-            Handle<Value> exception = self->makeException();
+            const char* err = self->errorName();
             delete self;
-            return ThrowException(exception);
-	  }
+            NanThrowError(err);
+            NanReturnUndefined();
+          }
       }
-    else
-      return throwTypeError("Bad argument.");
+    else {
+      NanThrowTypeError("Bad argument.");
+      NanReturnUndefined();
+    }
   }
 
   StringPrep(const UStringPrepProfileType profileType)
@@ -102,18 +95,20 @@ protected:
 
   /*** Prepare ***/
 
-  static Handle<Value> Prepare(const Arguments& args)
+  static NAN_METHOD(Prepare)
   {
-    HandleScope scope;
+    NanScope();
 
     if (args.Length() >= 1 && args[0]->IsString())
       {
         StringPrep *self = ObjectWrap::Unwrap<StringPrep>(args.This());
-	String::Value arg0(args[0]->ToString());
-        return scope.Close(self->prepare(arg0));
+        String::Value arg0(args[0]->ToString());
+        NanReturnValue(self->prepare(arg0));
       }
-    else
-      return throwTypeError("Bad argument.");
+    else {
+      NanThrowTypeError("Bad argument.");
+      NanReturnUndefined();
+    }
   }
 
   Handle<Value> prepare(String::Value &str)
@@ -140,7 +135,8 @@ protected:
           {
             // other error, just bail out
             delete[] dest;
-            return ThrowException(makeException());
+            NanThrowError(errorName());
+            return v8::Undefined();
           }
         else
           destLen = w;
@@ -194,9 +190,9 @@ private:
 
 /*** IDN support ***/
 
-Handle<Value> ToUnicode(const Arguments& args)
+NAN_METHOD(ToUnicode)
 {
-  HandleScope scope;
+  NanScope();
 
   if (args.Length() >= 1 && args[0]->IsString())
   {
@@ -224,8 +220,8 @@ Handle<Value> ToUnicode(const Arguments& args)
           {
             // other error, just bail out
             delete[] dest;
-            Handle<Value> exception = Exception::Error(String::New(u_errorName(error)));
-            return scope.Close(ThrowException(exception));
+            NanThrowError(u_errorName(error));
+            NanReturnUndefined();
           }
         else
           destLen = w;
@@ -233,10 +229,12 @@ Handle<Value> ToUnicode(const Arguments& args)
 
     Local<String> result = String::New(dest, destLen);
     delete[] dest;
-    return scope.Close(result);
+    NanReturnValue(result);
   }
-  else
-    return throwTypeError("Bad argument.");
+  else {
+    NanThrowTypeError("Bad argument.");
+    NanReturnUndefined();
+  }
 }
 
 
@@ -245,7 +243,7 @@ Handle<Value> ToUnicode(const Arguments& args)
 
 extern "C" void init(Handle<Object> target)
 {
-  HandleScope scope;
+  NanScope();
   StringPrep::Initialize(target);
   NODE_SET_METHOD(target, "toUnicode", ToUnicode);
 }
