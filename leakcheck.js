@@ -1,15 +1,14 @@
 var SP = require('./build/Release/node_stringprep.node')
-var useSetImmediate = (parseFloat(process.version.replace('v', '')) >= 0.10)
+var next = global.setImmediate
+  ? function () { setImmediate(run) }
+  : function () { process.nextTick(run) }
+
 function run() {
     var p = new SP.StringPrep('nameprep')
     var r = p.prepare('A\u0308ffin')
     if (r !== 'äffin')
-	throw r
-
-    if (true == useSetImmediate)
-        setImmediate(run)
-    else
-        process.nextTick(run)
+        throw r
+    next()
 }
 
 try {
@@ -17,7 +16,7 @@ try {
     console.log('Success')
     process.exit(0)
 } catch (e) {
-    console.log(JSON.stringify(e))
+    console.log(e.stack)
     process.exit(1)
 }
 

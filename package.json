@@ -1,7 +1,7 @@
 {
   "name": "node-stringprep",
   "version": "0.1.8",
-  "main": "./build/Release/node_stringprep.node",
+  "main": "index.js",
   "description": "ICU StringPrep profiles",
   "keywords": [
     "unicode",
@@ -11,7 +11,10 @@
   "scripts": {
     "test": "node leakcheck.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "nan": "~0.7.0",
+    "bindings": "~1.1.1"
+  },
   "devDependencies": {},
   "repository": {
     "type": "git",
@@ -24,11 +27,13 @@
     "email": "astro@spaceboyz.net",
     "web": "http://spaceboyz.net/~astro/"
   },
-  "maintainers": [{
-    "name": "Lloyd Watkin",
-    "email": "lloyd@evilprofessor.co.uk",
-    "web": "http://evilprofessor.co.uk"
-  }],
+  "maintainers": [
+    {
+      "name": "Lloyd Watkin",
+      "email": "lloyd@evilprofessor.co.uk",
+      "web": "http://evilprofessor.co.uk"
+    }
+  ],
   "licenses": [
     {
       "type": "MIT"
