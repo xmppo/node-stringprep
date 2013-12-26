@@ -1,5 +1,7 @@
 # node-stringprep #
 
+[![Build Status](https://travis-ci.org/node-xmpp/node-stringprep.png)](https://travis-ci.org/node-xmpp/node-stringprep)
+
 [Flattr this!](https://flattr.com/thing/44598/node-stringprep)
 
 ## Purpose ##
