@@ -1,1 +1,1 @@
-module.exports = require('bindings')('node_stringprep.node').leveldown
+module.exports = require('bindings')('node_stringprep.node')
