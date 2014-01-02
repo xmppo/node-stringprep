@@ -1,21 +1,18 @@
-var SP = require('../index')
-var next = global.setImmediate
-  ? function () { setImmediate(run) }
-  : function () { process.nextTick(run) }
+'use strict';
 
-function run() {
-    var p = new SP.StringPrep('nameprep')
-    var r = p.prepare('A\u0308ffin')
-    if (r !== 'äffin')
-        throw r
-    next()
-}
+require('should')
 
-try {
-    run()
-    console.log('Success')
-    process.exit(0)
-} catch (e) {
-    console.log(e.stack)
-    process.exit(1)
-}
+it('Should not leak', function(done) {
+
+    var SP = require('../index')
+
+    try {
+        var p = new SP.StringPrep('nameprep')
+        var result = p.prepare('A\u0308ffin')
+        result.should.equal('äffin')
+        done()
+    } catch (e) {
+        done(e)
+    }
+
+})
