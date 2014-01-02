@@ -1,4 +1,4 @@
-var namePrep, toUnicode, resourcePrep, nodePrep, StringPrep
+'use strict';
 
 try {
     var bindings = require('bindings')('node_stringprep.node')
@@ -35,7 +35,7 @@ StringPrep.prototype.prepare = function(value) {
     this.value = value
     try {
         if (this.stringPrep) {
-            return this.stringPrep(this.value)
+            return this.stringPrep.prepare(this.value)
         }
     } catch (e) {}
     return this.jsFallback()

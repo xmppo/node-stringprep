@@ -1,6 +1,6 @@
 'use strict';
 
-var proxyquire =  require('proxyquire')
+var proxyquire = require('proxyquire')
 
 describe('Should use JS fallbacks for StringPrep', function() {
 
