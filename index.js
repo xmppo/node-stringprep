@@ -35,7 +35,6 @@ StringPrep.prototype.prepare = function(value) {
     this.value = value
     try {
         if (this.stringPrep) {
-            console.log('using proper stringprep')
             return this.stringPrep(this.value)
         }
     } catch (e) {}
