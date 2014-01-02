@@ -14,5 +14,4 @@ it('Should not leak', function(done) {
     } catch (e) {
         done(e)
     }
-
 })
