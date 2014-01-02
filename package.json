@@ -9,7 +9,7 @@
     "icu"
   ],
   "scripts": {
-    "test": "node leakcheck.js"
+    "test": "node test/leakcheck.js"
   },
   "dependencies": {
     "nan": "~0.7.0",

@@ -1,4 +1,4 @@
-var SP = require('./build/Release/node_stringprep.node')
+var SP = require('../index')
 var next = global.setImmediate
   ? function () { setImmediate(run) }
   : function () { process.nextTick(run) }
@@ -19,4 +19,3 @@ try {
     console.log(e.stack)
     process.exit(1)
 }
-
