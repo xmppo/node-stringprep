@@ -9,13 +9,19 @@
     "icu"
   ],
   "scripts": {
-    "test": "node test/leakcheck.js"
+    "test": "grunt test"
   },
   "dependencies": {
     "nan": "~0.7.0",
     "bindings": "~1.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "proxyquire": "~0.5.2",
+    "grunt-mocha-cli": "~1.3.0",
+    "grunt-contrib-jshint": "~0.7.2",
+    "should": "~2.1.1",
+    "grunt": "~0.4.2"
+  },
   "repository": {
     "type": "git",
     "path": "git://github.com/astro/node-stringprep.git"
