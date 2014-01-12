@@ -24,10 +24,10 @@
   },
   "repository": {
     "type": "git",
-    "path": "git://github.com/astro/node-stringprep.git"
+    "path": "git://github.com/node-xmpp/node-stringprep.git"
   },
-  "homepage": "http://github.com/astro/node-stringprep",
-  "bugs": "http://github.com/astro/node-stringprep/issues",
+  "homepage": "http://github.com/node-xmpp/node-stringprep",
+  "bugs": "http://github.com/node-xmpp/node-stringprep/issues",
   "author": {
     "name": "Astro",
     "email": "astro@spaceboyz.net",
