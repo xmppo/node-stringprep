@@ -24,6 +24,11 @@ emerge icu
 #### MacPorts ####
     port install icu +devel
 
+#### Boxen ####
+
+    sudo ln -s /opt/boxen/homebrew/Cellar/icu4c/52.1/bin/icu-config /usr/local/bin/icu-config
+    sudo ln -s /opt/boxen/homebrew/Cellar/icu4c/52.1/include/* /usr/local/include
+    
 #### Homebrew ####
     brew install icu4c
     ln -s /usr/local/Cellar/icu4c/<VERSION>/bin/icu-config /usr/local/bin/icu-config
