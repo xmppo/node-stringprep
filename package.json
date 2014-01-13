@@ -11,9 +11,8 @@
   "scripts": {
     "test": "grunt test"
   },
-  "dependencies": {
-    "nan": "~0.7.0",
-    "bindings": "~1.1.1"
+  "optionalDependencies": {
+    "node-stringprep-icu": "~0.1.0"
   },
   "devDependencies": {
     "proxyquire": "~0.5.2",
@@ -29,17 +28,10 @@
   "homepage": "http://github.com/node-xmpp/node-stringprep",
   "bugs": "http://github.com/node-xmpp/node-stringprep/issues",
   "author": {
-    "name": "Astro",
-    "email": "astro@spaceboyz.net",
-    "web": "http://spaceboyz.net/~astro/"
-  },
-  "maintainers": [
-    {
       "name": "Lloyd Watkin",
       "email": "lloyd@evilprofessor.co.uk",
       "web": "http://evilprofessor.co.uk"
-    }
-  ],
+  },
   "licenses": [
     {
       "type": "MIT"
@@ -47,10 +39,5 @@
   ],
   "engines": {
     "node": ">=0.8"
-  },
-  "contributors": [
-    "Camilo Aguilar",
-    "Mauro Pompilio",
-    "Joachim Kainz"
-  ]
+  }
 }

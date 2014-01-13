@@ -4,7 +4,7 @@ var proxyquire = require('proxyquire')
 
 describe('Should use JS fallbacks for StringPrep', function() {
 
-    var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
+    var StringPrep = proxyquire('../index', { 'node-stringprep-icu': null }).StringPrep
 
     it('Should throw on unknown icu-profile', function(done) {
         var prep = new StringPrep('cRaZYcASE')
