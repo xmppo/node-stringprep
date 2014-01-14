@@ -2,21 +2,37 @@
   'targets': [
     {
       'target_name': 'node_stringprep',
-      'sources': [ 'node-stringprep.cc' ],
-      'cflags!': [ '-fno-exceptions', '`icu-config --cppflags`' ],
-      'cflags_cc!': [ '-fno-exceptions' ],
-      'libraries': [ '`icu-config --ldflags`' ],
+      'cflags_cc!': [ '-fno-exceptions', '-fmax-errors=0' ],
       'include_dirs': [
         '<!(node -e "require(\'nan\')")'
       ],
       'conditions': [
-        ['OS=="mac"', {
-          'include_dirs': [
-              '/opt/local/include'
-          ],
-          'xcode_settings': {
-            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
-          }
+        ['OS=="win"', {
+          'conditions': [
+            ['"<!@(cmd /C where /Q icu-config || echo n)"!="n"', {
+              'sources': [ 'node-stringprep.cc' ],
+              'cflags!': [ '-fno-exceptions', '`icu-config --cppflags`' ],
+              'libraries': [ '`icu-config --ldflags`' ]
+            }]
+          ]
+        }, { # OS != win
+          'conditions': [
+            ['"<!@(which icu-config > /dev/null || echo n)"!="n"', {
+              'sources': [ 'node-stringprep.cc' ],
+              'cflags!': [ '-fno-exceptions', '-fmax-errors=0', '`icu-config --cppflags`' ],
+              'libraries': [ '`icu-config --ldflags`' ],
+              'conditions': [
+                ['OS=="mac"', {
+                  'include_dirs': [
+                      '/opt/local/include'
+                  ],
+                  'xcode_settings': {
+                    'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
+                  }
+                }]
+              ]
+            }]
+          ]
         }]
       ]
      }
