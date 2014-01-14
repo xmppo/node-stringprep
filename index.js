@@ -1,18 +1,19 @@
 'use strict';
 
 try {
-    var icu = require('node-stringprep-icu')
+    var bindings = require('bindings')('node_stringprep.node')
 } catch (ex) {
     console.warn(
-        'Cannot load StringPrep-ICU' +
-        ' icu (using fallback). You may need to ' +
-        '`npm install node-stringprep-icu`'
+        'Cannot load StringPrep-' +
+        require('./package.json').version +
+        ' bindings (using fallback). You may need to ' +
+        '`npm install node-stringprep`'
     )
 }
 
 var toUnicode = function(value) {
     try {
-        return icu.toUnicode(value)
+        return bindings.toUnicode(value)
     } catch (e) {
         return value
     }
@@ -21,7 +22,7 @@ var toUnicode = function(value) {
 var StringPrep = function(operation) {
     this.operation = operation
     try {
-        this.stringPrep = new icu.StringPrep(this.operation)
+        this.stringPrep = new bindings.StringPrep(this.operation)
     } catch (e) {
         this.stringPrep = null
     }
