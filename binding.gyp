@@ -22,6 +22,11 @@
               'cflags!': [ '-fno-exceptions', '-fmax-errors=0', '`icu-config --cppflags`' ],
               'libraries': [ '`icu-config --ldflags`' ],
               'conditions': [
+                ['OS=="freebsd"', {
+                  'include_dirs': [
+                      '/usr/local/include'
+                  ],
+                }],
                 ['OS=="mac"', {
                   'include_dirs': [
                       '/opt/local/include'
