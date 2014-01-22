@@ -66,3 +66,36 @@ describe('Should use JS fallbacks for StringPrep', function() {
     })
 
 })
+
+
+describe('Can disable fallbacks', function() {
+    
+    var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
+
+    it('Should allow javascript fallbacks to be disabled', function(done) {
+        var prep = new StringPrep('nameprep')
+        try {
+            prep.disableJsFallbacks()
+            prep.prepare('UPPERCASE')
+            done('Should have thrown exception')
+        } catch (e) {
+            e.message.should.equal(prep.LIBICU_NOT_AVAILABLE)
+            done()
+        }
+    })
+    
+    it('Should allow javascript fallbacks to be re-enabled', function(done) {
+        var prep = new StringPrep('nameprep')
+        try {
+            prep.disableJsFallbacks()
+            prep.prepare('UPPERCASE')
+            done('Should have thrown exception')
+        } catch (e) {
+            e.message.should.equal(prep.LIBICU_NOT_AVAILABLE)
+            prep.enableJsFallbacks()
+            prep.prepare('UPPERCASE')
+            done()
+        }
+    })
+    
+})
