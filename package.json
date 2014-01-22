@@ -1,6 +1,6 @@
 {
   "name": "node-stringprep",
-  "version": "0.2.1",
+  "version": "0.2.0",
   "main": "index.js",
   "description": "ICU StringPrep profiles",
   "keywords": [
@@ -11,8 +11,9 @@
   "scripts": {
     "test": "grunt test"
   },
-  "optionalDependencies": {
-    "node-stringprep-icu": "~0.1.0"
+  "dependencies": {
+    "nan": "~0.7.0",
+    "bindings": "~1.1.1"
   },
   "devDependencies": {
     "proxyquire": "~0.5.2",
@@ -28,9 +29,9 @@
   "homepage": "http://github.com/node-xmpp/node-stringprep",
   "bugs": "http://github.com/node-xmpp/node-stringprep/issues",
   "author": {
-    "name": "Lloyd Watkin",
-    "email": "lloyd@evilprofessor.co.uk",
-    "web": "http://evilprofessor.co.uk"
+      "name": "Lloyd Watkin",
+      "email": "lloyd@evilprofessor.co.uk",
+      "web": "http://evilprofessor.co.uk"
   },
   "licenses": [
     {
