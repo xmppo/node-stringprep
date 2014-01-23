@@ -30,6 +30,9 @@ var StringPrep = function(operation) {
 
 StringPrep.prototype.UNKNOWN_PROFILE_TYPE = 'Unknown profile type'
 StringPrep.prototype.UNHANDLED_FALLBACK = 'Unhandled JS fallback'
+StringPrep.prototype.LIBICU_NOT_AVAILABLE = 'libicu unavailable'
+
+StringPrep.prototype.useJsFallbacks = true
 
 StringPrep.prototype.prepare = function(value) {
     this.value = value
@@ -38,7 +41,13 @@ StringPrep.prototype.prepare = function(value) {
             return this.stringPrep.prepare(this.value)
         }
     } catch (e) {}
+    if (false === this.useJsFallbacks)
+        throw new Error(this.LIBICU_NOT_AVAILABLE)
     return this.jsFallback()
+}
+
+StringPrep.prototype.isNative = function() {
+    return (null !== this.stringPrep)
 }
 
 StringPrep.prototype.jsFallback = function() {
@@ -62,6 +71,14 @@ StringPrep.prototype.jsFallback = function() {
         default:
             throw new Error(this.UNKNOWN_PROFILE_TYPE)
     }
+}
+
+StringPrep.prototype.disableJsFallbacks = function() {
+    this.useJsFallbacks = false
+}
+
+StringPrep.prototype.enableJsFallbacks = function() {
+    this.useJsFallbacks = true
 }
 
 module.exports = {

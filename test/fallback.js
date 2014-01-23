@@ -2,6 +2,7 @@
 
 var proxyquire = require('proxyquire')
 
+/* jshint -W030 */
 describe('Should use JS fallbacks for StringPrep', function() {
 
     var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
@@ -63,6 +64,54 @@ describe('Should use JS fallbacks for StringPrep', function() {
             }
         })
         if (false === isDone) done()
+    })
+
+})
+
+describe('Can disable fallbacks', function() {
+    
+    var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
+
+    it('Should allow javascript fallbacks to be disabled', function(done) {
+        var prep = new StringPrep('nameprep')
+        try {
+            prep.disableJsFallbacks()
+            prep.prepare('UPPERCASE')
+            done('Should have thrown exception')
+        } catch (e) {
+            e.message.should.equal(prep.LIBICU_NOT_AVAILABLE)
+            done()
+        }
+    })
+    
+    it('Should allow javascript fallbacks to be re-enabled', function(done) {
+        var prep = new StringPrep('nameprep')
+        try {
+            prep.disableJsFallbacks()
+            prep.prepare('UPPERCASE')
+            done('Should have thrown exception')
+        } catch (e) {
+            e.message.should.equal(prep.LIBICU_NOT_AVAILABLE)
+            prep.enableJsFallbacks()
+            prep.prepare('UPPERCASE')
+            done()
+        }
+    })
+    
+})
+
+describe('\'isNative\' method test', function() {
+
+    it('Reports true with native', function() {
+        var StringPrep = require('../index').StringPrep
+        var prep = new StringPrep('resourceprep')
+        prep.isNative().should.be.true
+    })
+
+    it('Reports false without native', function() {
+        var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
+        var prep = new StringPrep('resourceprep')
+        prep.isNative().should.be.false
     })
 
 })
