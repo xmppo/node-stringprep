@@ -12,6 +12,8 @@ Exposes predefined Unicode normalization functions that are required by many pro
 
     npm i node-stringprep
 
+If `libicu` isn't available installation will gracefully fail and javascript fallbacks will be used.
+
 ### Debian ###
 
     apt-get install libicu-dev
@@ -50,3 +52,18 @@ If experiencing issues with 'homebrew' installing version 50.1 of icu4c, try the
     prep.prepare('Äffchen')  // => 'äffchen'
 
 For a list of supported profiles, see [node-stringprep.cc](http://github.com/astro/node-stringprep/blob/master/node-stringprep.cc#L160)
+
+Javascript fallbacks can be disabled/enabled using the following methods on the `StringPrep` object:
+
+```javascript
+var prep = new StringPrep('resourceprep')
+prep.disableJsFallbacks()
+prep.enableJsFallbacks()
+```
+
+Javascript fallbacks are enabled by default. You can also check to see if native `icu` bindings can/will be used by calling the `isNative()` method:
+
+```javascript
+var prep = new StringPrep('resourceprep')
+prep.isNative()  // true or false
+```
