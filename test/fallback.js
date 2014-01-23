@@ -2,6 +2,7 @@
 
 var proxyquire = require('proxyquire')
 
+/* jshint -W030 */
 describe('Should use JS fallbacks for StringPrep', function() {
 
     var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
@@ -67,7 +68,6 @@ describe('Should use JS fallbacks for StringPrep', function() {
 
 })
 
-
 describe('Can disable fallbacks', function() {
     
     var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
@@ -98,4 +98,20 @@ describe('Can disable fallbacks', function() {
         }
     })
     
+})
+
+describe('\'isNative\' method test', function() {
+
+    it('Reports true with native', function() {
+        var StringPrep = require('../index').StringPrep
+        var prep = new StringPrep('resourceprep')
+        prep.isNative().should.be.true
+    })
+
+    it('Reports false without native', function() {
+        var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
+        var prep = new StringPrep('resourceprep')
+        prep.isNative().should.be.false
+    })
+
 })

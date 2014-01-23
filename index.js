@@ -46,6 +46,10 @@ StringPrep.prototype.prepare = function(value) {
     return this.jsFallback()
 }
 
+StringPrep.prototype.isNative = function() {
+    return (null !== this.stringPrep)
+}
+
 StringPrep.prototype.jsFallback = function() {
     switch (this.operation) {
         case 'nameprep':
