@@ -66,3 +66,19 @@ describe('Should use JS fallbacks for StringPrep', function() {
     })
 
 })
+
+describe('\'isNative\' method test', function() {
+
+    it('Reports true with native', function() {
+        var StringPrep = require('../index')
+        var prep = new StringPrep('resourceprep')
+        prep.isNative().should.be.true
+    })
+
+    it('Reports false without native', function() {
+        var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
+        var prep = new StringPrep('resourceprep')
+        prep.isNative().should.be.false
+    })
+
+})
