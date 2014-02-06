@@ -17,10 +17,14 @@ If `libicu` isn't available installation will gracefully fail and javascript fal
 ### Debian ###
 
     apt-get install libicu-dev
+    
+### RedHat, Centos ###    
+    
+    yum install libicu-devel
 
 ### Gentoo ###
 
-emerge icu
+    emerge icu
 
 ### OSX ###
 #### MacPorts ####
