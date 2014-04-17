@@ -14,6 +14,8 @@ Exposes predefined Unicode normalization functions that are required by many pro
 
 If `libicu` isn't available installation will gracefully fail and javascript fallbacks will be used.
 
+If experiencing issues with __node-gyp__ please see https://github.com/TooTallNate/node-gyp/issues/363 which may be able to help.
+
 ### Debian ###
 
     apt-get install libicu-dev
