@@ -12,7 +12,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "nan": "~0.7.0",
+    "nan": "^1.2.0",
     "bindings": "~1.1.1"
   },
   "devDependencies": {
