@@ -20,12 +20,12 @@ public:
   static void Initialize(Handle<Object> target)
   {
     NanScope();
-    Local<FunctionTemplate> t = FunctionTemplate::New(New);
-    NanAssignPersistent(FunctionTemplate, stringprep_constructor, t);
+    Local<FunctionTemplate> t = NanNew<FunctionTemplate>(New);
+    NanAssignPersistent(stringprep_constructor, t);
     t->InstanceTemplate()->SetInternalFieldCount(1);
     NODE_SET_PROTOTYPE_METHOD(t, "prepare", Prepare);
 
-    target->Set(String::NewSymbol("StringPrep"), t->GetFunction());
+    target->Set(NanNew<String>("StringPrep"), t->GetFunction());
   }
 
   bool good() const
@@ -136,13 +136,13 @@ protected:
             // other error, just bail out
             delete[] dest;
             NanThrowError(errorName());
-            return v8::Undefined();
+            return NanUndefined();
           }
         else
           destLen = w;
       }
 
-    Local<String> result = String::New(dest, destLen);
+    Local<String> result = NanNew<String>(dest, destLen);
     delete[] dest;
     return result;
   }
@@ -227,7 +227,7 @@ NAN_METHOD(ToUnicode)
           destLen = w;
       }
 
-    Local<String> result = String::New(dest, destLen);
+    Local<String> result = NanNew<String>(dest, destLen);
     delete[] dest;
     NanReturnValue(result);
   }
