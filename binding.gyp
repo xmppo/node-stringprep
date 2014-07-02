@@ -15,7 +15,22 @@
               'libraries': [ '`icu-config --ldflags`' ]
             }]
           ]
-        }, { # OS != win
+        }],
+        ['OS=="mac"', {
+          'sources' : [ 'node-stringprep.cc' ],
+          'defines': [
+            'U_DISABLE_RENAMING'
+          ],
+          'include_dirs': [
+            '.'
+          ],
+          'libraries': [
+            '-licucore'
+          ],
+          'xcode_settings': {
+            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
+          }
+        }, { # OS != win && OS != mac
           'conditions': [
             ['"<!@(which icu-config > /dev/null || echo n)"!="n"', {
               'sources': [ 'node-stringprep.cc' ],
