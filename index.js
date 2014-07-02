@@ -19,6 +19,14 @@ var toUnicode = function(value) {
     }
 }
 
+var toASCII = function(value) {
+    try {
+        return bindings.toASCII(value)
+    } catch (e) {
+        return value
+    }
+}
+
 var StringPrep = function(operation) {
     this.operation = operation
     try {
@@ -83,5 +91,6 @@ StringPrep.prototype.enableJsFallbacks = function() {
 
 module.exports = {
     toUnicode: toUnicode,
+    toASCII: toASCII,
     StringPrep: StringPrep
 }
