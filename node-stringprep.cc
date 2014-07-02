@@ -237,7 +237,49 @@ NAN_METHOD(ToUnicode)
   }
 }
 
+NAN_METHOD(ToASCII)
+{
+  NanScope();
 
+  if (args.Length() >= 1 && args[0]->IsString())
+  {
+    String::Value str(args[0]->ToString());
+
+    // find out length first
+    UErrorCode error = U_ZERO_ERROR;
+    size_t strLen = str.length();
+    size_t destLen = uidna_toASCII(*str, strLen,
+                                   NULL, 0,
+                                   UIDNA_DEFAULT,
+                                   NULL, &error);
+    UChar *dest = NULL;
+    if (error == U_BUFFER_OVERFLOW_ERROR)
+      {
+        // now try with dest buffer
+        error = U_ZERO_ERROR;
+        dest = new UChar[destLen];
+        uidna_toASCII(*str, strLen,
+                      dest, destLen,
+                      UIDNA_DEFAULT,
+                      NULL, &error);
+      }
+    if (U_FAILURE(error))
+      {
+        // other error, just bail out
+        delete[] dest;
+        NanThrowError(u_errorName(error));
+        NanReturnUndefined();
+      }
+
+    Local<String> result = NanNew<String>(dest, destLen);
+    delete[] dest;
+    NanReturnValue(result);
+  }
+  else {
+    NanThrowTypeError("Bad argument.");
+    NanReturnUndefined();
+  }
+}
 
 /*** Initialization ***/
 
@@ -246,6 +288,7 @@ extern "C" void init(Handle<Object> target)
   NanScope();
   StringPrep::Initialize(target);
   NODE_SET_METHOD(target, "toUnicode", ToUnicode);
+  NODE_SET_METHOD(target, "toASCII", ToASCII);
 }
 
 NODE_MODULE(node_stringprep, init)
