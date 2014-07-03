@@ -1,5 +1,9 @@
 'use strict';
 
+// from unicode/uidna.h
+var UIDNA_ALLOW_UNASSIGNED = 1
+var UIDNA_USE_STD3_RULES = 2
+
 try {
     var bindings = require('bindings')('node_stringprep.node')
 } catch (ex) {
@@ -11,19 +15,27 @@ try {
     )
 }
 
-var toUnicode = function(value) {
+var toUnicode = function(value, options) {
+    options = options || {}
     try {
-        return bindings.toUnicode(value)
+        return bindings.toUnicode(value,
+            (options.allowUnassigned && UIDNA_ALLOW_UNASSIGNED) | 0)
     } catch (e) {
         return value
     }
 }
 
-var toASCII = function(value) {
+var toASCII = function(value, options) {
+    options = options || {}
     try {
-        return bindings.toASCII(value)
+        return bindings.toASCII(value,
+            (options.allowUnassigned && UIDNA_ALLOW_UNASSIGNED) |
+            (options.useSTD3Rules && UIDNA_USE_STD3_RULES))
     } catch (e) {
-        return value
+        if (options.throwIfError)
+            throw e
+        else
+            return value
     }
 }
 
