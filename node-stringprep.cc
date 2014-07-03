@@ -194,9 +194,11 @@ NAN_METHOD(ToUnicode)
 {
   NanScope();
 
-  if (args.Length() >= 1 && args[0]->IsString())
+  if (args.Length() >= 2 && args[0]->IsString() && args[1]->IsInt32())
   {
     String::Value str(args[0]->ToString());
+    int32_t options = args[1]->ToInt32()->Value();
+
     // ASCII encoding (xn--*--*) should be longer than Unicode
     size_t destLen = str.length() + 1;
     UChar *dest = NULL;
@@ -206,7 +208,7 @@ NAN_METHOD(ToUnicode)
         UErrorCode error = U_ZERO_ERROR;
         size_t w = uidna_toUnicode(*str, str.length(),
                                    dest, destLen,
-                                   UIDNA_DEFAULT,
+                                   options,
                                    NULL, &error);
         
         if (error == U_BUFFER_OVERFLOW_ERROR)
@@ -241,16 +243,17 @@ NAN_METHOD(ToASCII)
 {
   NanScope();
 
-  if (args.Length() >= 1 && args[0]->IsString())
+  if (args.Length() >= 2 && args[0]->IsString() && args[1]->IsInt32())
   {
     String::Value str(args[0]->ToString());
+    int32_t options = args[1]->ToInt32()->Value();
 
     // find out length first
     UErrorCode error = U_ZERO_ERROR;
     size_t strLen = str.length();
     size_t destLen = uidna_toASCII(*str, strLen,
                                    NULL, 0,
-                                   UIDNA_DEFAULT,
+                                   options,
                                    NULL, &error);
     UChar *dest = NULL;
     if (error == U_BUFFER_OVERFLOW_ERROR)
@@ -260,7 +263,7 @@ NAN_METHOD(ToASCII)
         dest = new UChar[destLen];
         uidna_toASCII(*str, strLen,
                       dest, destLen,
-                      UIDNA_DEFAULT,
+                      options,
                       NULL, &error);
       }
     if (U_FAILURE(error))
