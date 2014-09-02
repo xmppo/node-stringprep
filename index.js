@@ -1,6 +1,6 @@
 'use strict';
 
-var log = debug('node-stringprep')
+var log = require('debug')('node-stringprep')
 
 // from unicode/uidna.h
 var UIDNA_ALLOW_UNASSIGNED = 1
