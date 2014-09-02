@@ -4,13 +4,13 @@ node_js:
   - "0.10"
   - "0.11"
 before_install:
-  - npm i -g npm
   - "sudo apt-get install libicu-dev"
   # Workaround for a permissions issue with Travis virtual machine images
   # that breaks Python's multiprocessing:
   # https://github.com/travis-ci/travis-cookbooks/issues/155
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
+  - npm i -g npm@1.X
 env: DEBUG=*
 before_script:
   - npm install -g grunt-cli
