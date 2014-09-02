@@ -1,5 +1,7 @@
 'use strict';
 
+var log = debug('node-stringprep')
+
 // from unicode/uidna.h
 var UIDNA_ALLOW_UNASSIGNED = 1
 var UIDNA_USE_STD3_RULES = 2
@@ -13,6 +15,7 @@ try {
         ' bindings (using fallback). You may need to ' +
         '`npm install node-stringprep`'
     )
+    log(ex)
 }
 
 var toUnicode = function(value, options) {
@@ -32,10 +35,11 @@ var toASCII = function(value, options) {
             (options.allowUnassigned && UIDNA_ALLOW_UNASSIGNED) |
             (options.useSTD3Rules && UIDNA_USE_STD3_RULES))
     } catch (e) {
-        if (options.throwIfError)
+        if (options.throwIfError) {
             throw e
-        else
+        } else {
             return value
+        }
     }
 }
 
@@ -45,6 +49,7 @@ var StringPrep = function(operation) {
         this.stringPrep = new bindings.StringPrep(this.operation)
     } catch (e) {
         this.stringPrep = null
+        log('Operation does not exist', operation, e)
     }
 }
 
@@ -61,8 +66,9 @@ StringPrep.prototype.prepare = function(value) {
             return this.stringPrep.prepare(this.value)
         }
     } catch (e) {}
-    if (false === this.useJsFallbacks)
+    if (false === this.useJsFallbacks) {
         throw new Error(this.LIBICU_NOT_AVAILABLE)
+    }
     return this.jsFallback()
 }
 

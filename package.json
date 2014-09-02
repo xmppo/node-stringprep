@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "nan": "^1.2.0",
-    "bindings": "~1.1.1"
+    "bindings": "~1.1.1",
+    "debug": "^2.0.0"
   },
   "devDependencies": {
     "proxyquire": "~0.5.2",
