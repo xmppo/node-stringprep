@@ -10,7 +10,7 @@ try {
     var bindings = require('bindings')('node_stringprep.node')
 } catch (ex) {
     if (process.title !== 'browser') {
-        console.warn(
+        console.log(
             'Cannot load StringPrep-' +
             require('./package.json').version +
             ' bindings (using fallback). You may need to ' +
