@@ -20,7 +20,7 @@
             ['"<!@(which icu-config > /dev/null || echo n)"!="n"', {
               'sources': [ 'node-stringprep.cc' ],
               'cflags!': [ '-fno-exceptions', '-fmax-errors=0', '`icu-config --cppflags`' ],
-              'libraries': [ '-Wl,-z,relro -Wl,-z,now  -ldl -lm   -L/usr/lib/x86_64-linux-gnu -licui18n -licuuc -licudata  -ldl -lm' ],
+              'libraries': [ '`icu-config --ldflags`' ],
               'conditions': [
                 ['OS=="freebsd"', {
                   'include_dirs': [
