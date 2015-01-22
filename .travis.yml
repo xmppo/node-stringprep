@@ -11,6 +11,3 @@ before_install:
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
   - npm i -g npm@1.X
-env: DEBUG=*
-before_script:
-  - npm install -g grunt-cli
