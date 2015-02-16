@@ -6,7 +6,7 @@
 
 ## Manual
 
-Please see the `node-xmpp` manual for more information, http://node-xmpp.github.io/doc/nodestringprep.html.
+Please see the `node-xmpp` manual for more information, http://node-xmpp.org/doc/stringprep.html.
 
 ## Running Tests
 
