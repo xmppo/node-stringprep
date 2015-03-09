@@ -14,8 +14,8 @@ try {
         require('./package.json').version +
         ' bindings (using fallback). You may need to ' +
         '`npm install node-stringprep`'
-     )
-     log(ex)
+    )
+    log(ex)
 }
 
 var toUnicode = function(value, options) {
