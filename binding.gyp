@@ -22,7 +22,7 @@
               'cflags!': [ '-fno-exceptions', '-fmax-errors=0', '`icu-config --cppflags`' ],
               'libraries': [ '`icu-config --ldflags`' ],
               'conditions': [
-                ['OS=="freebsd"', {
+                ['OS=="freebsd" or OS=="openbsd"', {
                   'include_dirs': [
                       '/usr/local/include'
                   ],
