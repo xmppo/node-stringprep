@@ -1,6 +1,6 @@
 {
   "name": "node-stringprep",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "main": "index.js",
   "description": "ICU StringPrep profiles",
   "keywords": [
