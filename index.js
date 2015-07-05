@@ -9,15 +9,13 @@ var UIDNA_USE_STD3_RULES = 2
 try {
     var bindings = require('bindings')('node_stringprep.node')
 } catch (ex) {
-    if (process.title !== 'browser') {
-        console.log(
-            'Cannot load StringPrep-' +
-            require('./package.json').version +
-            ' bindings (using fallback). You may need to ' +
-            '`npm install node-stringprep`'
-        )
-        log(ex)
-    }
+    log(
+        'Cannot load StringPrep-' +
+        require('./package.json').version +
+        ' bindings (using fallback). You may need to ' +
+        '`npm install node-stringprep`'
+    )
+    log(ex)
 }
 
 var toUnicode = function(value, options) {
