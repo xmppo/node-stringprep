@@ -61,15 +61,14 @@ StringPrep.prototype.useJsFallbacks = true
 
 StringPrep.prototype.prepare = function(value) {
     this.value = value
-    try {
-        if (this.stringPrep) {
-            return this.stringPrep.prepare(this.value)
-        }
-    } catch (e) {}
-    if (false === this.useJsFallbacks) {
+
+    if (this.stringPrep) {
+        return this.stringPrep.prepare(this.value)
+    } else if (this.useJsFallbacks) {
+        return this.jsFallback()
+    } else {
         throw new Error(this.LIBICU_NOT_AVAILABLE)
     }
-    return this.jsFallback()
 }
 
 StringPrep.prototype.isNative = function() {
