@@ -13,19 +13,19 @@ class UnknownProfileException : public std::exception {
 };
 
 // protect constructor from GC
-static Persistent<FunctionTemplate> stringprep_constructor;
+static Nan::Persistent<FunctionTemplate> stringprep_constructor;
 
-class StringPrep : public ObjectWrap {
+class StringPrep : public Nan::ObjectWrap {
 public:
-  static void Initialize(Handle<Object> target)
+  static void Initialize(Local<Object> target)
   {
-    NanScope();
-    Local<FunctionTemplate> t = NanNew<FunctionTemplate>(New);
-    NanAssignPersistent(stringprep_constructor, t);
+    Nan::HandleScope scope;
+    Local<FunctionTemplate> t = Nan::New<FunctionTemplate>(New);
+    stringprep_constructor.Reset(t);
     t->InstanceTemplate()->SetInternalFieldCount(1);
-    NODE_SET_PROTOTYPE_METHOD(t, "prepare", Prepare);
+    Nan::SetPrototypeMethod(t, "prepare", Prepare);
 
-    target->Set(NanNew<String>("StringPrep"), t->GetFunction());
+    Nan::Set(target, Nan::New<String>("StringPrep").ToLocalChecked(), t->GetFunction());
   }
 
   bool good() const
@@ -43,11 +43,9 @@ protected:
 
   static NAN_METHOD(New)
   {
-    NanScope();
-
-    if (args.Length() >= 1 && args[0]->IsString())
+    if (info.Length() >= 1 && info[0]->IsString())
       {
-        String::Utf8Value arg0(args[0]->ToString());
+        Nan::Utf8String arg0(info[0]->ToString());
         UStringPrepProfileType profileType;
         try
           {
@@ -55,27 +53,28 @@ protected:
           }
         catch (UnknownProfileException &)
           {
-            NanThrowTypeError("Unknown StringPrep profile");
-            NanReturnUndefined();
+            Nan::ThrowTypeError("Unknown StringPrep profile");
+            return;
           }
 
         StringPrep *self = new StringPrep(profileType);
         if (self->good())
           {
-            self->Wrap(args.This());
-            NanReturnValue(args.This());
+            self->Wrap(info.This());
+            info.GetReturnValue().Set(info.This());
+            return;
           }
         else
           {
             const char* err = self->errorName();
             delete self;
-            NanThrowError(err);
-            NanReturnUndefined();
+            Nan::ThrowError(err);
+            return;
           }
       }
     else {
-      NanThrowTypeError("Bad argument.");
-      NanReturnUndefined();
+      Nan::ThrowTypeError("Bad argument.");
+      return;
     }
   }
 
@@ -97,27 +96,27 @@ protected:
 
   static NAN_METHOD(Prepare)
   {
-    NanScope();
-
-    if (args.Length() >= 1 && args[0]->IsString())
+    if (info.Length() >= 1 && info[0]->IsString())
       {
-        StringPrep *self = ObjectWrap::Unwrap<StringPrep>(args.This());
-        String::Value arg0(args[0]->ToString());
-        NanReturnValue(self->prepare(arg0));
+        StringPrep *self = Nan::ObjectWrap::Unwrap<StringPrep>(info.This());
+        String::Value arg0(info[0]->ToString());
+        info.GetReturnValue().Set(self->prepare(arg0));
+        return;
       }
     else {
-      NanThrowTypeError("Bad argument.");
-      NanReturnUndefined();
+      Nan::ThrowTypeError("Bad argument.");
+      return;
     }
   }
 
-  Handle<Value> prepare(String::Value &str)
+  Local<Value> prepare(String::Value &str)
   {
+    Nan::EscapableHandleScope scope
     size_t destLen = str.length() + 1;
     UChar *dest = NULL;
     while(!dest)
       {
-        error = U_ZERO_ERROR;
+        UErrorCode error = U_ZERO_ERROR;
         dest = new UChar[destLen];
         size_t w = usprep_prepare(profile,
                                   *str, str.length(),
@@ -131,27 +130,26 @@ protected:
             delete[] dest;
             dest = NULL;
           }
-        else if (!good())
+        else if (!U_SUCCESS(error))
           {
             // other error, just bail out
             delete[] dest;
-            NanThrowError(errorName());
-            return NanUndefined();
+            Nan::ThrowTypeError(u_errorName(error));
+            return scope.Escape(Nan::Undefined());
           }
         else
           destLen = w;
       }
 
-    Local<String> result = NanNew<String>(dest, destLen);
     delete[] dest;
-    return result;
+    return scope.Escape(Nan::New<String>(dest, destLen).ToLocalChecked());
   }
 
 private:
   UStringPrepProfile *profile;
   UErrorCode error;
 
-  static enum UStringPrepProfileType parseProfileType(String::Utf8Value &profile)
+  static enum UStringPrepProfileType parseProfileType(Nan::Utf8String &profile)
     throw(UnknownProfileException)
   {
     if (strcasecmp(*profile, "nameprep") == 0)
@@ -192,12 +190,10 @@ private:
 
 NAN_METHOD(ToUnicode)
 {
-  NanScope();
-
-  if (args.Length() >= 2 && args[0]->IsString() && args[1]->IsInt32())
+  if (info.Length() >= 2 && info[0]->IsString() && info[1]->IsInt32())
   {
-    String::Value str(args[0]->ToString());
-    int32_t options = args[1]->ToInt32()->Value();
+    String::Value str(info[0]->ToString());
+    int32_t options = info[1]->ToInt32()->Value();
 
     // ASCII encoding (xn--*--*) should be longer than Unicode
     size_t destLen = str.length() + 1;
@@ -210,7 +206,7 @@ NAN_METHOD(ToUnicode)
                                    dest, destLen,
                                    options,
                                    NULL, &error);
-        
+
         if (error == U_BUFFER_OVERFLOW_ERROR)
           {
             // retry with a dest buffer twice as large
@@ -222,31 +218,30 @@ NAN_METHOD(ToUnicode)
           {
             // other error, just bail out
             delete[] dest;
-            NanThrowError(u_errorName(error));
-            NanReturnUndefined();
+            Nan::ThrowError(u_errorName(error));
+            return;
           }
         else
           destLen = w;
       }
 
-    Local<String> result = NanNew<String>(dest, destLen);
+    Local<String> result = Nan::New<String>(dest, destLen);
     delete[] dest;
-    NanReturnValue(result);
+    info.GetReturnValue().Set(result);
+    return;
   }
   else {
-    NanThrowTypeError("Bad argument.");
-    NanReturnUndefined();
+    Nan::ThrowTypeError("Bad argument.");
+    return;
   }
 }
 
 NAN_METHOD(ToASCII)
 {
-  NanScope();
-
-  if (args.Length() >= 2 && args[0]->IsString() && args[1]->IsInt32())
+  if (info.Length() >= 2 && info[0]->IsString() && info[1]->IsInt32())
   {
-    String::Value str(args[0]->ToString());
-    int32_t options = args[1]->ToInt32()->Value();
+    String::Value str(info[0]->ToString());
+    int32_t options = info[1]->ToInt32()->Value();
 
     // find out length first
     UErrorCode error = U_ZERO_ERROR;
@@ -270,28 +265,30 @@ NAN_METHOD(ToASCII)
       {
         // other error, just bail out
         delete[] dest;
-        NanThrowError(u_errorName(error));
-        NanReturnUndefined();
+        Nan::ThrowError(u_errorName(error));
+        return;
       }
 
-    Local<String> result = NanNew<String>(dest, destLen);
+    Local<String> result = Nan::New<String>(dest, destLen);
     delete[] dest;
-    NanReturnValue(result);
+    info.GetReturnValue().Set(result);
+    return;
   }
   else {
-    NanThrowTypeError("Bad argument.");
-    NanReturnUndefined();
+    Nan::ThrowTypeError("Bad argument.");
+    return;
   }
 }
 
 /*** Initialization ***/
 
-extern "C" void init(Handle<Object> target)
-{
-  NanScope();
-  StringPrep::Initialize(target);
-  NODE_SET_METHOD(target, "toUnicode", ToUnicode);
-  NODE_SET_METHOD(target, "toASCII", ToASCII);
+extern "C" {
+  static void init (Local<Object> target)
+  {
+    Nan::HandleScope scope;
+    StringPrep::Initialize(target);
+    Nan::SetMethod(target, "toUnicode", ToUnicode);
+    Nan::SetMethod(target, "toASCII", ToASCII);
+  }
+  NODE_MODULE(node_stringprep, init)
 }
-
-NODE_MODULE(node_stringprep, init)
