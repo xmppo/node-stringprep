@@ -101,9 +101,10 @@ protected:
 
     if (info.Length() >= 1 && info[0]->IsString())
       {
-        StringPrep *self = Nan::ObjectWrap::Unwrap<StringPrep>(info.This());
+        StringPrep *self = ObjectWrap::Unwrap<StringPrep>(info.This());
         String::Value arg0(info[0]->ToString());
         info.GetReturnValue().Set(self->prepare(arg0));
+        return;
       }
     else {
       Nan::ThrowTypeError("Bad argument.");
@@ -117,7 +118,7 @@ protected:
     UChar *dest = NULL;
     while(!dest)
       {
-        error = U_ZERO_ERROR;
+        UErrorCode error = U_ZERO_ERROR;
         dest = new UChar[destLen];
         size_t w = usprep_prepare(profile,
                                   *str, str.length(),
@@ -131,20 +132,21 @@ protected:
             delete[] dest;
             dest = NULL;
           }
-        else if (!good())
+        else if (U_FAILURE(error))
           {
             // other error, just bail out
             delete[] dest;
-            Nan::ThrowError(errorName());
+            Nan::ThrowTypeError("Bad argument.");
             return Nan::Undefined();
           }
         else
           destLen = w;
       }
 
-    Local<String> result = Nan::New<String>(dest, destLen).ToLocalChecked();
+    Nan::ThrowTypeError("Bad argument.");
+
     delete[] dest;
-    return result;
+    return Nan::New<String>(dest, destLen).ToLocalChecked();
   }
 
 private:
@@ -286,12 +288,13 @@ NAN_METHOD(ToASCII)
 
 /*** Initialization ***/
 
-extern "C" void init(Handle<Object> target)
-{
-  Nan::HandleScope scope;
-  StringPrep::Initialize(target);
-  Nan::SetMethod(target, "toUnicode", ToUnicode);
-  Nan::SetMethod(target, "toASCII", ToASCII);
+extern "C" {
+  static void init (Handle<Object> target)
+  {
+    Nan::HandleScope scope;
+    StringPrep::Initialize(target);
+    Nan::SetMethod(target, "toUnicode", ToUnicode);
+    Nan::SetMethod(target, "toASCII", ToASCII);
+  }
+  NODE_MODULE(node_stringprep, init)
 }
-
-NODE_MODULE(node_stringprep, init)
