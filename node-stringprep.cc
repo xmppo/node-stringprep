@@ -13,19 +13,19 @@ class UnknownProfileException : public std::exception {
 };
 
 // protect constructor from GC
-static Nan::Persistent<v8::FunctionTemplate> stringprep_constructor;
+static Nan::Persistent<FunctionTemplate> stringprep_constructor;
 
-class StringPrep : public ObjectWrap {
+class StringPrep : public Nan::ObjectWrap {
 public:
-  static void Initialize(Local<Object> target)
+  static void Initialize(Handle<Object> target)
   {
     Nan::HandleScope scope;
     Local<FunctionTemplate> t = Nan::New<FunctionTemplate>(New);
-    // Nan::Persistent<FunctionTemplate>(stringprep_constructor, t);
+    stringprep_constructor.Reset(t);
     t->InstanceTemplate()->SetInternalFieldCount(1);
     Nan::SetPrototypeMethod(t, "prepare", Prepare);
 
-    target->Set(Nan::New("StringPrep").ToLocalChecked(), t->GetFunction());
+    target->Set(Nan::New<String>("StringPrep").ToLocalChecked(), t->GetFunction());
   }
 
   bool good() const
@@ -101,17 +101,18 @@ protected:
 
     if (info.Length() >= 1 && info[0]->IsString())
       {
-        StringPrep *self = ObjectWrap::Unwrap<StringPrep>(info.This());
+        StringPrep *self = Nan::ObjectWrap::Unwrap<StringPrep>(info.This());
         String::Value arg0(info[0]->ToString());
         info.GetReturnValue().Set(self->prepare(arg0));
       }
     else {
       Nan::ThrowTypeError("Bad argument.");
+      info.GetReturnValue().SetUndefined();
       return;
     }
   }
 
-  Local<Value> prepare(String::Value &str)
+  Handle<Value> prepare(String::Value &str)
   {
     size_t destLen = str.length() + 1;
     UChar *dest = NULL;
@@ -136,6 +137,7 @@ protected:
             // other error, just bail out
             delete[] dest;
             Nan::ThrowTypeError(errorName());
+            return Nan::Undefined();
           }
         else
           destLen = w;
@@ -222,6 +224,7 @@ NAN_METHOD(ToUnicode)
             // other error, just bail out
             delete[] dest;
             Nan::ThrowError(u_errorName(error));
+            info.GetReturnValue().SetUndefined();
             return;
           }
         else
@@ -235,6 +238,7 @@ NAN_METHOD(ToUnicode)
   }
   else {
     Nan::ThrowTypeError("Bad argument.");
+    info.GetReturnValue().SetUndefined();
     return;
   }
 }
@@ -271,6 +275,7 @@ NAN_METHOD(ToASCII)
         // other error, just bail out
         delete[] dest;
         Nan::ThrowError(u_errorName(error));
+        info.GetReturnValue().SetUndefined();
         return;
       }
 
@@ -282,22 +287,17 @@ NAN_METHOD(ToASCII)
     Nan::ThrowTypeError("Bad argument.");
     return;
   }
-}
+};
 
 /*** Initialization ***/
 
-extern "C" void init(Local<Object> target)
-{
-  Nan::HandleScope scope;
-  StringPrep::Initialize(target);
-  //Nan::SetPrototypeMethod(Nan::New<FunctionTemplate>(StringPrep), "toUnicode", ToUnicode);
-  //Nan::SetPrototypeMethod(Nan::New<FunctionTemplate>(StringPrep), "toASCII", ToASCII);
-  //target->Set(Nan::New("toUnicode").ToLocalChecked(), ToUnicode);
-  //target->Set(Nan::New("toASCII").ToLocalChecked(), ToASCII);
-
-  target->Set(Nan::New("toUnicode").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(ToUnicode)->GetFunction());
-
-  target->Set(Nan::New("toASCII").ToLocalChecked(), Nan::New<v8::FunctionTemplate>(ToASCII)->GetFunction());
-}
-
-NODE_MODULE(node_stringprep, init)
+extern "C" {
+  static void init (Handle<Object> target)
+  {
+    Nan::HandleScope scope;
+    StringPrep::Initialize(target);
+    Nan::SetMethod(target, "toUnicode", ToUnicode);
+    Nan::SetMethod(target, "toASCII", ToASCII);
+  }
+  NODE_MODULE(node_stringprep, init)
+};

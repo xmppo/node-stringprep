@@ -7,7 +7,7 @@ var UIDNA_ALLOW_UNASSIGNED = 1
 var UIDNA_USE_STD3_RULES = 2
 
 try {
-    var bindings = require('./node_modules/bindings/bindings')('node_stringprep.node')
+    var bindings = require('bindings')('node_stringprep.node')
 } catch (ex) {
     log(
         'Cannot load StringPrep-' +
