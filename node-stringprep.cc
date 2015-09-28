@@ -56,6 +56,7 @@ protected:
         catch (UnknownProfileException &)
           {
             Nan::ThrowTypeError("Unknown StringPrep profile");
+            info.GetReturnValue().SetUndefined();
             return;
           }
 
@@ -70,11 +71,13 @@ protected:
             const char* err = self->errorName();
             delete self;
             Nan::ThrowError(err);
+            info.GetReturnValue().SetUndefined();
             return;
           }
       }
     else {
       Nan::ThrowTypeError("Bad argument.");
+      info.GetReturnValue().SetUndefined();
       return;
     }
   }
