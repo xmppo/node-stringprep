@@ -101,10 +101,9 @@ protected:
 
     if (info.Length() >= 1 && info[0]->IsString())
       {
-        StringPrep *self = ObjectWrap::Unwrap<StringPrep>(info.This());
+        StringPrep *self = Nan::ObjectWrap::Unwrap<StringPrep>(info.This());
         String::Value arg0(info[0]->ToString());
         info.GetReturnValue().Set(self->prepare(arg0));
-        return;
       }
     else {
       Nan::ThrowTypeError("Bad argument.");
@@ -132,18 +131,16 @@ protected:
             delete[] dest;
             dest = NULL;
           }
-        else if (U_FAILURE(error))
+        else if (!U_SUCCESS(error))
           {
             // other error, just bail out
             delete[] dest;
-            Nan::ThrowTypeError("Bad argument.");
+            Nan::ThrowError(u_errorName(error));
             return Nan::Undefined();
           }
         else
           destLen = w;
       }
-
-    Nan::ThrowTypeError("Bad argument.");
 
     delete[] dest;
     return Nan::New<String>(dest, destLen).ToLocalChecked();

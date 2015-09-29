@@ -11,7 +11,7 @@ describe('Should use JS fallbacks for StringPrep', function() {
         var prep = new StringPrep('cRaZYcASE')
         try {
             prep.prepare('UPPERCASE')
-            done('Should have thrown error')
+            done(new Error('Should have thrown error'))
         } catch (e) {
             e.message.should.equal(prep.UNKNOWN_PROFILE_TYPE)
             done()
@@ -58,7 +58,7 @@ describe('Should use JS fallbacks for StringPrep', function() {
             try {
                 prep.prepare('UPPERCASE')
                 isDone = true
-                done('Should have thrown error')
+                done(new Error('Should have thrown error for profile ' + profile))
             } catch (e) {
                 e.message.should.equal(prep.UNHANDLED_FALLBACK)
             }
@@ -69,7 +69,7 @@ describe('Should use JS fallbacks for StringPrep', function() {
 })
 
 describe('Can disable fallbacks', function() {
-    
+
     var StringPrep = proxyquire('../index', { 'bindings': null }).StringPrep
 
     it('Should allow javascript fallbacks to be disabled', function(done) {
@@ -77,19 +77,19 @@ describe('Can disable fallbacks', function() {
         try {
             prep.disableJsFallbacks()
             prep.prepare('UPPERCASE')
-            done('Should have thrown exception')
+            done(new Error('Should have thrown exception'))
         } catch (e) {
             e.message.should.equal(prep.LIBICU_NOT_AVAILABLE)
             done()
         }
     })
-    
+
     it('Should allow javascript fallbacks to be re-enabled', function(done) {
         var prep = new StringPrep('nameprep')
         try {
             prep.disableJsFallbacks()
             prep.prepare('UPPERCASE')
-            done('Should have thrown exception')
+            done(new Error('Should have thrown exception'))
         } catch (e) {
             e.message.should.equal(prep.LIBICU_NOT_AVAILABLE)
             prep.enableJsFallbacks()
@@ -97,7 +97,7 @@ describe('Can disable fallbacks', function() {
             done()
         }
     })
-    
+
 })
 
 describe('\'isNative\' method test', function() {
