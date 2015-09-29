@@ -283,10 +283,10 @@ NAN_METHOD(ToASCII)
 /*** Initialization ***/
 
 NAN_MODULE_INIT(init)
-  {
-    StringPrep::Initialize(target);
-    Nan::SetMethod(target, "toUnicode", ToUnicode);
-    Nan::SetMethod(target, "toASCII", ToASCII);
-  }
-  NODE_MODULE(node_stringprep, init)
+{
+  StringPrep::Initialize(target);
+  Nan::SetMethod(target, "toUnicode", ToUnicode);
+  Nan::SetMethod(target, "toASCII", ToASCII);
 }
+
+NODE_MODULE(node_stringprep, init)
