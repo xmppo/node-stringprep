@@ -282,10 +282,8 @@ NAN_METHOD(ToASCII)
 
 /*** Initialization ***/
 
-extern "C" {
-  static void init (Local<Object> target)
+NAN_MODULE_INIT(init)
   {
-    Nan::HandleScope scope;
     StringPrep::Initialize(target);
     Nan::SetMethod(target, "toUnicode", ToUnicode);
     Nan::SetMethod(target, "toASCII", ToASCII);
