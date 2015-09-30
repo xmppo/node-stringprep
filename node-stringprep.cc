@@ -111,7 +111,7 @@ protected:
 
   Local<Value> prepare(String::Value &str)
   {
-    Nan::EscapableHandleScope scope
+    Nan::EscapableHandleScope scope;
     size_t destLen = str.length() + 1;
     UChar *dest = NULL;
     while(!dest)
