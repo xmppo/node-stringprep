@@ -225,7 +225,7 @@ NAN_METHOD(ToUnicode)
           destLen = w;
       }
 
-    Local result = Nan::New(dest, destLen).ToLocalChecked();
+    Local<String> result = Nan::New(dest, destLen).ToLocalChecked();
     delete[] dest;
     info.GetReturnValue().Set(result);
     return;
@@ -269,7 +269,7 @@ NAN_METHOD(ToASCII)
         return;
       }
 
-    Local result = Nan::New(dest, destLen).ToLocalChecked();
+    Local<String> result = Nan::New(dest, destLen).ToLocalChecked();
     delete[] dest;
     info.GetReturnValue().Set(result);
     return;
