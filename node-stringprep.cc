@@ -194,6 +194,13 @@ NAN_METHOD(ToUnicode)
   {
     String::Value str(info[0]->ToString());
     int32_t options = info[1]->ToInt32()->Value();
+    UErrorCode error = U_ZERO_ERROR;
+    UIDNA *uidna = uidna_openUTS46(options, &error);
+    if (U_FAILURE(error))
+      {
+        Nan::ThrowError(u_errorName(error));
+        return;
+      }
 
     // ASCII encoding (xn--*--*) should be longer than Unicode
     size_t destLen = str.length() + 1;
@@ -201,11 +208,10 @@ NAN_METHOD(ToUnicode)
     while(!dest)
       {
         dest = new UChar[destLen];
-        UErrorCode error = U_ZERO_ERROR;
-        size_t w = uidna_toUnicode(*str, str.length(),
-                                   dest, destLen,
-                                   options,
-                                   NULL, &error);
+        size_t w = uidna_nameToUnicode(uidna,
+                                       *str, str.length(),
+                                       dest, destLen,
+                                       NULL, &error);
 
         if (error == U_BUFFER_OVERFLOW_ERROR)
           {
@@ -218,6 +224,7 @@ NAN_METHOD(ToUnicode)
           {
             // other error, just bail out
             delete[] dest;
+            uidna_close(uidna);
             Nan::ThrowError(u_errorName(error));
             return;
           }
@@ -227,6 +234,7 @@ NAN_METHOD(ToUnicode)
 
     Local<String> result = Nan::New(dest, destLen).ToLocalChecked();
     delete[] dest;
+    uidna_close(uidna);
     info.GetReturnValue().Set(result);
     return;
   }
@@ -242,35 +250,37 @@ NAN_METHOD(ToASCII)
   {
     String::Value str(info[0]->ToString());
     int32_t options = info[1]->ToInt32()->Value();
+    UErrorCode error = U_ZERO_ERROR;
+    UIDNA *uidna = uidna_openUTS46(options, &error);
+    if (U_FAILURE(error))
+      {
+        Nan::ThrowError(u_errorName(error));
+        return;
+      }
 
     // find out length first
-    UErrorCode error = U_ZERO_ERROR;
     size_t strLen = str.length();
-    size_t destLen = uidna_toASCII(*str, strLen,
-                                   NULL, 0,
-                                   options,
-                                   NULL, &error);
+    size_t destLen = uidna_labelToASCII_UTF8(uidna, reinterpret_cast<char*>(*str), strLen, NULL, 0, NULL, &error);
     UChar *dest = NULL;
     if (error == U_BUFFER_OVERFLOW_ERROR)
       {
         // now try with dest buffer
         error = U_ZERO_ERROR;
         dest = new UChar[destLen];
-        uidna_toASCII(*str, strLen,
-                      dest, destLen,
-                      options,
-                      NULL, &error);
+        uidna_labelToASCII_UTF8(uidna, reinterpret_cast<char*>(*str), strLen, reinterpret_cast<char*>(dest), destLen, NULL, &error);
       }
     if (U_FAILURE(error))
       {
         // other error, just bail out
         delete[] dest;
+        uidna_close(uidna);
         Nan::ThrowError(u_errorName(error));
         return;
       }
 
     Local<String> result = Nan::New(dest, destLen).ToLocalChecked();
     delete[] dest;
+    uidna_close(uidna);
     info.GetReturnValue().Set(result);
     return;
   }
