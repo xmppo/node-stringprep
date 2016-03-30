@@ -24,12 +24,9 @@
     "proxyquire": "~0.5.2",
     "should": "~8.0.0"
   },
-  "repository": {
-    "type": "git",
-    "path": "git://github.com/node-xmpp/node-stringprep.git"
-  },
-  "homepage": "http://github.com/node-xmpp/node-stringprep",
-  "bugs": "http://github.com/node-xmpp/node-stringprep/issues",
+  "repository": "github:astro/node-stringprep",
+  "homepage": "http://github.com/astro/node-stringprep",
+  "bugs": "http://github.com/astro/node-stringprep/issues",
   "author": {
     "name": "Lloyd Watkin",
     "email": "lloyd@evilprofessor.co.uk",
