@@ -14,7 +14,7 @@ it('Should convert to ASCII', function(done) {
 it('Should throw on error', function(done) {
 
 	var SP = require('../index')
-	SP.toASCII.bind(SP, '\ud83d\ude03', { throwIfError: true }).should.throw()
+	SP.toASCII.bind(SP, 'xn--\ud83d\ude03', { throwIfError: true }).should.throw()
 	done()
 })
 
