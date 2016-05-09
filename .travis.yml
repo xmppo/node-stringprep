@@ -14,4 +14,6 @@ addons:
     packages:
     - g++-5
     - libicu-dev
+env:
+- CXX=g++-5
 before_script: g++ -v
