@@ -8,14 +8,10 @@ node_js:
   - "4"
   - "5"
   - "stable"
-compilers:
-  - gcc47
-  - gcc48
-  - gcc49
-  - gcc5
-  - clang-35
-  - clang-38
 addons:
   apt:
+    sources:
+    - ubuntu-toolchain-r-test
     packages:
+    - g++-5
     - libicu-dev
