@@ -15,3 +15,4 @@ addons:
     packages:
     - g++-5
     - libicu-dev
+before_script: g++ -v
