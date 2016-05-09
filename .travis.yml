@@ -9,14 +9,12 @@ node_js:
   - "5"
   - "stable"
 compilers:
-  - gcc-4.8
-  - gcc-4.9
-  - gcc-5.3
-  - gcc-6.1
-  - clang-3.4
-  - clang-3.5
-  - clang-3.6
-  - clang-3.7
+  - gcc47
+  - gcc48
+  - gcc49
+  - gcc5
+  - clang-35
+  - clang-38
 addons:
   apt:
     packages:
