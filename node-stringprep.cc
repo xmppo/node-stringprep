@@ -119,7 +119,7 @@ protected:
         error = U_ZERO_ERROR;
         dest = new UChar[destLen];
         size_t w = usprep_prepare(profile,
-                                  *str, str.length(),
+                                  (const UChar*)*str, str.length(),
                                   dest, destLen,
                                   USPREP_DEFAULT, NULL, &error);
 
@@ -141,7 +141,7 @@ protected:
           destLen = w;
       }
 
-    Local<Value> result = Nan::New<String>(dest, destLen).ToLocalChecked();
+    Local<Value> result = Nan::New<String>((uint16_t*)dest, destLen).ToLocalChecked();
     delete[] dest;
     return scope.Escape(result);
   }
@@ -212,7 +212,7 @@ NAN_METHOD(ToUnicode)
         UIDNAInfo uinfo = UIDNA_INFO_INITIALIZER;
         size_t w = uidna_nameToUnicode(
           uidna,
-          *str, str.length(),
+          (const UChar*)*str, str.length(),
           dest, destLen,
           &uinfo, &error);
         
@@ -235,7 +235,7 @@ NAN_METHOD(ToUnicode)
           destLen = w;
       }
 
-    Local<String> result = Nan::New<String>(dest, destLen).ToLocalChecked();
+    Local<String> result = Nan::New<String>((uint16_t*)dest, destLen).ToLocalChecked();
     delete[] dest;
     uidna_close(uidna);
     info.GetReturnValue().Set(result);
@@ -266,7 +266,7 @@ NAN_METHOD(ToASCII)
     UIDNAInfo uinfo1 = UIDNA_INFO_INITIALIZER;
     size_t destLen = uidna_nameToASCII(
       uidna,
-      *str, strLen,
+      (const UChar*)*str, strLen,
       NULL, 0,
       &uinfo1, &error);
     UChar *dest = NULL;
@@ -278,7 +278,7 @@ NAN_METHOD(ToASCII)
         UIDNAInfo uinfo2 = UIDNA_INFO_INITIALIZER;
         uidna_nameToASCII(
           uidna,
-          *str, strLen,
+          (const UChar*)*str, strLen,
           dest, destLen,
           &uinfo2, &error);
         if (U_SUCCESS(error) && uinfo2.errors > 0)
@@ -295,7 +295,7 @@ NAN_METHOD(ToASCII)
         return;
       }
 
-    Local<String> result = Nan::New<String>(dest, destLen).ToLocalChecked();
+    Local<String> result = Nan::New<String>((uint16_t*)dest, destLen).ToLocalChecked();
     delete[] dest;
     uidna_close(uidna);
     info.GetReturnValue().Set(result);
